@@ -11,24 +11,68 @@ Your goal is to:
 - Evaluate what your system gets right and wrong
 - Reflect on how this mirrors real world AI recommenders
 
-Replace this paragraph with your own summary of what your version does.
+This project builds a small content-based music recommender that suggests songs based on a user’s taste profile. The system compares song attributes like genre, mood, energy, and acousticness to what the user prefers, then assigns each song a score. After scoring all songs, it ranks them from highest to lowest and returns the top recommendations. The goal is to show how recommendation systems can turn user preferences and item features into predictions in a simple and explainable way.
 
 ---
 
 ## How The System Works
 
-Explain your design in plain language.
+This recommender uses a content-based approach, meaning it recommends songs by comparing a user’s preferences directly to the features of each song in the catalog. Instead of learning from many users’ listening behavior, this version focuses on matching song attributes like genre, mood, energy, and acousticness. The goal is to build a simple and explainable system that shows how recommendation logic can be turned into code.
 
-Some prompts to answer:
+Each `Song` in the dataset includes attributes such as `genre`, `mood`, `energy`, `tempo_bpm`, `valence`, `danceability`, and `acousticness`. For scoring, my system mainly uses `genre`, `mood`, `energy`, and `acousticness`. The `UserProfile` stores a favorite genre, a favorite mood, a target energy level, and whether the user prefers acoustic songs. This gives the recommender enough information to tell apart different types of listeners, such as someone who likes chill lofi versus someone who prefers intense rock.
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+### Features Used
 
-You can include a simple diagram or bullet list if helpful.
+**Song**
+- genre
+- mood
+- energy
+- acousticness
 
+**UserProfile**
+- favorite_genre
+- favorite_mood
+- target_energy
+- likes_acoustic
+
+### Example User Profile
+
+```python
+{
+    "favorite_genre": "lofi",
+    "favorite_mood": "chill",
+    "target_energy": 0.4,
+    "likes_acoustic": True
+}
+```
+
+### Algorithm Recipe
+
+My recommender uses a weighted scoring system to decide which songs to recommend.
+
+For each song:
+- add **+2.0 points** if the song’s genre matches the user’s favorite genre
+- add **+1.5 points** if the song’s mood matches the user’s favorite mood
+- add up to **+2.0 points** based on how close the song’s energy is to the user’s target energy
+- add up to **+1.0 point** based on whether the song matches the user’s acoustic preference
+
+After scoring every song in the dataset, the system sorts the songs from highest score to lowest score and returns the top 5 recommendations.
+
+### Data Flow
+
+Input: User preferences  
+Process: Loop through every song in `songs.csv`, compute a score using the scoring logic, and save the result  
+Output: Rank all songs by score and return the top recommendations
+
+```mermaid
+flowchart LR
+    A[User Profile] --> B[Read songs from songs.csv]
+    B --> C[Score each song]
+    A --> C
+    C --> D[Rank songs by score]
+    D --> E[Return Top 5 recommendations]
+```
+    
 ---
 
 ## Getting Started
@@ -68,25 +112,15 @@ You can add more tests in `tests/test_recommender.py`.
 
 ## Experiments You Tried
 
-Use this section to document the experiments you ran. For example:
+I experimented with changing the weights used in the scoring system to see how the recommendations shifted. When genre was weighted more heavily, the recommender became stricter and mostly returned songs from the exact preferred genre, even if other songs matched the user’s mood and energy well. When mood or energy mattered more, the system produced recommendations that felt more flexible and vibe-based instead of being tied mainly to genre labels.
 
-- What happened when you changed the weight on genre from 2.0 to 0.5
-- What happened when you added tempo or valence to the score
-- How did your system behave for different types of users
+I also thought about adding features such as tempo and valence to make the scoring more detailed. This could help the system better distinguish between songs that share the same genre but feel very different. At the same time, adding too many features could make the scoring harder to explain and easier to overfit to small differences in the dataset.
 
 ---
 
 ## Limitations and Risks
 
-Summarize some limitations of your recommender.
-
-Examples:
-
-- It only works on a tiny catalog
-- It does not understand lyrics or language
-- It might over favor one genre or mood
-
-You will go deeper on this in your model card.
+This recommender only works on a very small catalog, so the recommendations are limited by what is available in the dataset. It does not understand lyrics, artist similarity, language, cultural context, or listening history, which means it misses many factors that shape real music preferences. It may also over-favor certain genres or moods depending on how the scoring weights are chosen. Because the rules are hand-designed, the system reflects human assumptions and may not generalize well to every listener.
 
 ---
 
@@ -208,4 +242,8 @@ A few sentences about what you learned:
 - What surprised you about how your system behaved
 - How did building this change how you think about real music recommenders
 - Where do you think human judgment still matters, even if the model seems "smart"
+
+---
+## Instruction Summary
+
 
