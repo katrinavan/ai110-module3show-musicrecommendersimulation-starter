@@ -118,6 +118,33 @@ I also thought about adding features such as tempo and valence to make the scori
 
 ---
 
+## Evaluation
+
+### User Profiles Tested
+
+I tested two user profiles:
+
+- User 1: prefers pop, happy mood, high energy
+- User 2: prefers lofi, chill mood, low energy, acoustic songs
+
+### Why the Top Song Ranked First
+
+For User 2, “Library Rain” ranked first because it matched both the user’s preferred genre (“lofi”) and mood (“chill”), which have the highest weights in the scoring system. It also had an energy level very close to the user’s target (difference of 0.05), and it matched the user’s preference for acoustic songs.
+
+### Comparison Between Users
+
+The recommendations for User 2 are noticeably different from User 1. While User 1 received more energetic and upbeat songs, User 2 received calmer, more acoustic and chill songs. This shows that the recommender successfully adapts to different user preferences.
+
+### Limitations and Bias
+
+One limitation of this recommender is that it strongly prioritizes exact genre and mood matches. Songs that are similar but not labeled the same may be ranked lower, reducing diversity.
+
+### Observations
+
+One interesting observation is that some songs ranked lower even though they had very close energy levels. This shows that genre and mood have stronger influence on the final score.
+
+---
+
 ## Limitations and Risks
 
 This recommender only works on a very small catalog, so the recommendations are limited by what is available in the dataset. It does not understand lyrics, artist similarity, language, cultural context, or listening history, which means it misses many factors that shape real music preferences. It may also over-favor certain genres or moods depending on how the scoring weights are chosen. Because the rules are hand-designed, the system reflects human assumptions and may not generalize well to every listener.
