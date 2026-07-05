@@ -7,7 +7,7 @@ import csv
 class Song:
     """
     Represents a song and its attributes.
-    Required by tests/test_recommender.py
+    Required by tests/test_recommender.py 
     """
     id: int
     title: str

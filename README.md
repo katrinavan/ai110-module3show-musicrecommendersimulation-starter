@@ -141,7 +141,7 @@ One limitation of this recommender is that it strongly prioritizes exact genre a
 
 ### Observations
 
-One interesting observation is that some songs ranked lower even though they had very close energy levels. This shows that genre and mood have stronger influence on the final score.
+One interesting observation is that some songs ranked lower even though they had very close energy levels. This shows that genre and mood have stronger influence on the final score!
 
 ---
 
